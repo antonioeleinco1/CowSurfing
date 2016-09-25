@@ -2,9 +2,13 @@ package co.com.eleinco.cowsurfing;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,12 +46,6 @@ public class MainActivity extends AppCompatActivity {
         tagArray = new ArrayList<Long>();
         idArray = new ArrayList<Long>();
         ult_Ubicacion = new ArrayList<String>();
-        tvFechaActualizacion = (TextView) findViewById(R.id.tvFechaActualizacion);
-        tvVacasRegistradas = (TextView) findViewById(R.id.tvVacasRegistradas);
-        tvVacasSensadas = (TextView) findViewById(R.id.tvVacasSensadas);
-        tvZona1 = (TextView) findViewById(R.id.tvVacasZona1);
-        tvZona2 = (TextView) findViewById(R.id.tvVacasZona2);
-        tvZona3 = (TextView) findViewById(R.id.tvVacasZona3);
 
     }
 
@@ -85,11 +83,6 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
 
-                    tvZona1.setText("Zona 1: " + zone1);
-                    tvZona2.setText("Zona 2: " + zone2);
-                    tvZona3.setText("Zona 3: " + zone3);
-                    tvVacasSensadas.setText(""+ult_Ubicacion.size());
-                    tvFechaActualizacion.setText("25/09/2016");
                 }
 
                 @Override
@@ -100,4 +93,47 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private class adaptador extends RecyclerView.Adapter<adaptador.plantilla>{
+
+        public adaptador() {
+        }
+
+        @Override
+        public adaptador.plantilla onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.rv_tabla,parent,false);
+
+            return new plantilla(view);
+        }
+
+        @Override
+        public void onBindViewHolder(adaptador.plantilla holder, int position) {
+            holder.tvId.setText();
+        }
+
+        @Override
+        public int getItemCount() {
+            return 0;
+        }
+
+        public class plantilla extends RecyclerView.ViewHolder{
+
+            TextView tvId;
+            TextView tvZona;
+            TextView tvHato;
+            TextView tvFecha;
+
+            public plantilla(View itemView) {
+                super(itemView);
+
+                tvId = (TextView) itemView.findViewById(R.id.id);
+                tvZona = (TextView) itemView.findViewById(R.id.tvZona);
+                tvHato = (TextView) itemView.findViewById(R.id.tvHatos);
+                tvFecha = (TextView) itemView.findViewById(R.id.tvFecha);
+            }
+        }
+
+    }
+
 }
