@@ -54,13 +54,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot s: dataSnapshot.getChildren()) {
-                    /*System.out.println("Snapshot: " + s.getValue());*/
                     ult_Ubicacion.add(s.child("clientId").getValue(Long.class).toString()+","+s.child("zoneId").getValue(Long.class).toString()+","+s.child("tagId").getValue(Long.class).toString()+","+s.child("dateTime").getValue(Long.class).toString());
-               /*     tagArray.add(s.child("tagId").getValue(Long.class));
-                    long longTag = s.child("tagId").getValue(Long.class);
-                    zoneArray.add(s.child("zoneId").getValue(Long.class));
-                    long longZone = s.child("zoneId").getValue(Long.class);
-                    idArray.add(s.child("clientId").getValue(Long.class));*/
                 }
                 zone1 = 0;
                 zone2 = 0;
@@ -85,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCancelled(FirebaseError firebaseError) {
                 System.out.println("The read failed: " + firebaseError.getMessage());
-                Toast.makeText(MainActivity.this,firebaseError.getMessage(),Toast.LENGTH_SHORT).show();
             }
         });
     }
