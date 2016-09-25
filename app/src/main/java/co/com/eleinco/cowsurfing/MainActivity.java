@@ -1,5 +1,7 @@
 package co.com.eleinco.cowsurfing;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -22,6 +24,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
     private TextView tvZona1;
     private TextView tvZona2;
     private TextView tvZona3;
@@ -36,11 +40,18 @@ public class MainActivity extends AppCompatActivity {
     private int zone1;
     private int zone2;
     private int zone3;
+    private RecyclerView recyclerView;
+    private adaptador adapter;
+    public static zonas zone = new zonas();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        adaptador adapter = new adaptador();
+        recyclerView = (RecyclerView) findViewById(R.id.rv_Tabla);
+        recyclerView.setAdapter(adapter);
 
         zoneArray = new ArrayList<Long>();
         tagArray = new ArrayList<Long>();
@@ -82,7 +93,18 @@ public class MainActivity extends AppCompatActivity {
                             zone3++;
                         }
                     }
-
+                    sharedPreferences = getApplicationContext().getSharedPreferences("preferencias", Context.MODE_PRIVATE);
+                    editor = sharedPreferences.edit();
+                    editor.putInt("zona1",zone1);
+                    editor.putInt("zona2",zone2);
+                    editor.putInt("zona3",zone3);
+                    System.out.println("zona1**********************" +zone2);
+                    zone.setZona1(zone1);
+                    zone.setZona2(zone2);
+                    zone.setZona3(zone3);
+                    adaptador adapter = new adaptador();
+                    adapter.notifyDataSetChanged();
+                    System.out.println("zonaaaaaaaaaa1**********************" +zone.getZona1());
                 }
 
                 @Override
@@ -96,25 +118,57 @@ public class MainActivity extends AppCompatActivity {
 
     private class adaptador extends RecyclerView.Adapter<adaptador.plantilla>{
 
+
+
         public adaptador() {
+
         }
 
         @Override
         public adaptador.plantilla onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.rv_tabla,parent,false);
-
             return new plantilla(view);
         }
 
         @Override
         public void onBindViewHolder(adaptador.plantilla holder, int position) {
-            holder.tvId.setText();
+
+            if(position==0){
+                holder.tvId.setText("Id");
+                holder.tvId.setTextSize(20);
+                holder.tvId.setTextColor(getResources().getColor(R.color.negro));
+                holder.tvZona.setText("Zona");
+                holder.tvZona.setTextSize(20);
+                holder.tvZona.setTextColor(getResources().getColor(R.color.negro));
+                holder.tvHato.setText("Cantidad");
+                holder.tvHato.setTextSize(20);
+                holder.tvHato.setTextColor(getResources().getColor(R.color.negro));
+                holder.tvFecha.setText("Fecha");
+                holder.tvFecha.setTextSize(20);
+                holder.tvFecha.setTextColor(getResources().getColor(R.color.negro));
+            }else{
+                holder.tvId.setText(Integer.toString(position));
+                holder.tvZona.setText(Integer.toString(position));
+                if(position == 1){
+                    System.out.println("zonaa para comprobar" + zone.getZona1());
+                    holder.tvHato.setText(Integer.toString(sharedPreferences.getInt("zona1",-1)));
+                    System.out.println("The read failed1: " + sharedPreferences.getInt("zona1",-1));
+                }else if(position == 2){
+                    holder.tvHato.setText(Integer.toString(sharedPreferences.getInt("zona2",-1)));
+                    System.out.println("The read failed2: " + zone.getZona2());
+                }else if(position == 3){
+                    holder.tvHato.setText(Integer.toString(sharedPreferences.getInt("zona3",-1)));
+                    System.out.println("The read failed3: " + zone.getZona3());
+                }
+                holder.tvFecha.setText("25/09/2016");
+            }
+
         }
 
         @Override
         public int getItemCount() {
-            return 0;
+            return 4;
         }
 
         public class plantilla extends RecyclerView.ViewHolder{
@@ -134,6 +188,31 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    public static class zonas{
+        int zona1;
+        int zona2;
+        int zona3;
+
+        public zonas() {
+        }
+
+        public int getZona1() {return zona1;}
+        public int getZona2() {return zona2;}
+        public int getZona3() {return zona3;}
+
+        public void setZona1(int zona1) {
+            this.zona1 = zona1;
+        }
+
+        public void setZona2(int zona2) {
+            this.zona2 = zona2;
+        }
+
+        public void setZona3(int zona3) {
+            this.zona3 = zona3;
+        }
     }
 
 }
